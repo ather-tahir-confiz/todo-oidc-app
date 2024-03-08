@@ -121,7 +121,7 @@ function App() {
           {/** 10 seconds */}
           <Button
             onClick={() => {
-              kc.logout({ redirectUri: "https://todo-oidc-app.azurewebsites.net/" });
+              kc.logout({ redirectUri: "https://red-mud-015949010.4.azurestaticapps.net/" });
             }}
             className="m-1"
             label="Logout"
