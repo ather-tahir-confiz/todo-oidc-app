@@ -15,11 +15,17 @@ const ProfilePage = () => {
             alt="Profile Picture"
           />
           <CardContent>
-            <Typography gutterBottom variant="h5" component="div">
-              {keycloak?.tokenParsed?.name}
+            <Typography gutterBottom variant="h6" component="div">
+              First Name: {keycloak?.tokenParsed?.given_name}
             </Typography>
-            <Typography variant="body2" color="textSecondary">
-              {keycloak?.tokenParsed?.email}
+            <Typography gutterBottom variant="h6" component="div">
+              Last Name: {keycloak?.tokenParsed?.family_name}
+            </Typography>
+            <Typography gutterBottom variant="h6" component="div">
+              User Name: {keycloak?.tokenParsed?.preferred_username}
+            </Typography>
+            <Typography gutterBottom variant="h6" component="div">
+              Email: {keycloak?.tokenParsed?.email}
             </Typography>
           </CardContent>
         </Card>

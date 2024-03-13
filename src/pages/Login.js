@@ -25,7 +25,7 @@ export default function LoginPage() {
   }, [keycloak.authenticated, navigate]);
 
   const login = () => {
-    keycloak.login({ redirectUri: "http://localhost:3000/home" });
+    keycloak.login({ redirectUri: `${process.env.REACT_APP_URL}/home` });
   };
   return (
     <ThemeProvider theme={defaultTheme}>
