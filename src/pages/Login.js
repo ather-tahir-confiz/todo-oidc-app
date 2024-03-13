@@ -22,7 +22,7 @@ export default function LoginPage() {
       isFirstMount.current = true;
       navigate("/home");
     }
-  }, [keycloak.authenticated]);
+  }, [keycloak.authenticated, navigate]);
 
   const login = () => {
     keycloak.login({ redirectUri: "http://localhost:3000/home" });

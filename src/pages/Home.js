@@ -18,7 +18,7 @@ function HomePage() {
       isFirstMount.current = true;
       navigate("/");
     }
-  }, [keycloak.authenticated]);
+  }, [keycloak.authenticated, navigate]);
 
   if (!initialized) {
     <Box
