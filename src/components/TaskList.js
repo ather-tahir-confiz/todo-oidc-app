@@ -8,7 +8,6 @@ import {
   IconButton,
   CircularProgress,
 } from "@mui/material";
-import { useKeycloak } from "keycloak-react-web";
 import DeleteIcon from "@mui/icons-material/Delete";
 import EditIcon from "@mui/icons-material/Edit";
 import axiosInstance from "../api";
@@ -21,7 +20,7 @@ const TaskList = ({
   setFetchTask,
   isFetchTask,
 }) => {
-  const { keycloak } = useKeycloak();
+  const token = JSON.parse(localStorage.getItem("keycloak_token"));
   const [tasks, setTasks] = useState([]);
   const [loading, setLoading] = useState(false);
   const [isEdit, setEdit] = useState("");
@@ -32,7 +31,7 @@ const TaskList = ({
         setLoading(true);
         const response = await axiosInstance.get("/todo", {
           headers: {
-            Authorization: `Bearer ${keycloak?.token}`,
+            Authorization: `Bearer ${token?.access_token}`,
           },
         });
         if (response?.status === 200) {
@@ -52,7 +51,7 @@ const TaskList = ({
     setSnackbarMessage,
     setSnackbarSeverity,
     setOpenSnackbar,
-    keycloak?.token,
+    token?.access_token,
   ]);
 
   const handleDelete = async (taskId) => {
@@ -60,7 +59,7 @@ const TaskList = ({
       setLoading(true);
       const response = await axiosInstance.delete(`/todo/${taskId}`, {
         headers: {
-          Authorization: `Bearer ${keycloak?.token}`,
+          Authorization: `Bearer ${token?.access_token}`,
         },
       });
       setSnackbarMessage(response?.data?.message);

@@ -9,11 +9,10 @@ import {
   MenuItem,
 } from "@mui/material";
 import AccountCircle from "@mui/icons-material/AccountCircle";
-import { useKeycloak } from "keycloak-react-web";
+import { useNavigate } from "react-router-dom";
 
 export default function Navbar({ setIsHome }) {
-  const { keycloak } = useKeycloak();
-
+  const navigate = useNavigate();
   const [anchorEl, setAnchorEl] = React.useState(null);
 
   const handleMenu = (event) => {
@@ -26,7 +25,8 @@ export default function Navbar({ setIsHome }) {
 
   const handleLogout = () => {
     handleClose();
-    keycloak.logout();
+    localStorage.removeItem("keycloak_token");
+    navigate("/");
   };
 
   const handleProfile = () => {

@@ -8,7 +8,6 @@ import {
   Select,
   IconButton,
 } from "@mui/material";
-import { useKeycloak } from "keycloak-react-web";
 import CloseIcon from "@mui/icons-material/Close";
 import axiosInstance from "../api";
 
@@ -23,7 +22,7 @@ export default function EditTask({
   isFetchTask,
   setFetchTask,
 }) {
-  const { keycloak } = useKeycloak();
+  const token = JSON.parse(localStorage.getItem("keycloak_token"));
   const [taskName, setTaskName] = useState(taskNameDefault);
   const [status, setStatus] = useState(taskStatusDefault);
 
@@ -43,7 +42,7 @@ export default function EditTask({
     try {
       await axiosInstance.patch(`/todo/${taskId}`, payload, {
         headers: {
-          Authorization: `Bearer ${keycloak?.token}`,
+          Authorization: `Bearer ${token?.access_token}`,
         },
       });
       setTaskName("");
