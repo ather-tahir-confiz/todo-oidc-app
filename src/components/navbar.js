@@ -10,9 +10,11 @@ import {
 } from "@mui/material";
 import AccountCircle from "@mui/icons-material/AccountCircle";
 import { useKeycloak } from "keycloak-react-web";
+import { useNavigate } from "react-router-dom";
 import logo from "../imgs/logo.png";
 
 export default function Navbar({ setIsHome }) {
+  const navigate = useNavigate();
   const { keycloak } = useKeycloak();
 
   const [anchorEl, setAnchorEl] = React.useState(null);
@@ -27,7 +29,12 @@ export default function Navbar({ setIsHome }) {
 
   const handleLogout = () => {
     handleClose();
-    keycloak.logout();
+    if (keycloak?.authenticated) {
+      keycloak.logout({ redirectUri: `${process.env.REACT_APP_URL}` });
+    } else {
+      localStorage.removeItem("keycloak_token");
+      navigate("/");
+    }
   };
 
   const handleProfile = () => {

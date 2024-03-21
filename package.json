@@ -13,6 +13,7 @@
     "@testing-library/user-event": "^13.5.0",
     "axios": "^1.6.7",
     "env-cmd": "^10.1.0",
+    "jwt-decode": "^4.0.0",
     "keycloak-js": "^24.0.1",
     "keycloak-react-web": "^0.1.19",
     "primeflex": "^3.3.1",

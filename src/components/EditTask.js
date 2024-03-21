@@ -24,6 +24,7 @@ export default function EditTask({
   setFetchTask,
 }) {
   const { keycloak } = useKeycloak();
+  const token = JSON.parse(localStorage.getItem("keycloak_token"));
   const [taskName, setTaskName] = useState(taskNameDefault);
   const [status, setStatus] = useState(taskStatusDefault);
 
@@ -43,7 +44,9 @@ export default function EditTask({
     try {
       await axiosInstance.patch(`/todo/${taskId}`, payload, {
         headers: {
-          Authorization: `Bearer ${keycloak?.token}`,
+          Authorization: `Bearer ${
+            keycloak.authenticated ? keycloak?.token : token?.access_token
+          }`,
         },
       });
       setTaskName("");

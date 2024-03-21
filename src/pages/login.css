@@ -28,3 +28,10 @@
     height: 40px;
     margin: 0px 8px;
   }
+
+  .login-container {
+    margin-top: 50px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }

@@ -19,6 +19,8 @@ export default function NewTask({
   setFetchTask,
 }) {
   const { keycloak } = useKeycloak();
+  const token = JSON.parse(localStorage.getItem("keycloak_token"));
+
   const [taskName, setTaskName] = useState("");
   const [status, setStatus] = useState("");
 
@@ -38,7 +40,9 @@ export default function NewTask({
     try {
       await axiosInstance.post("/todo", payload, {
         headers: {
-          Authorization: `Bearer ${keycloak?.token}`,
+          Authorization: `Bearer ${
+            keycloak.authenticated ? keycloak?.token : token?.access_token
+          }`,
         },
       });
       setTaskName("");

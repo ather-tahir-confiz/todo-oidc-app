@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from "react";
+import React, { useState } from "react";
 import {
   Container,
   TextField,
@@ -7,10 +7,13 @@ import {
   Box,
   Button,
   CssBaseline,
+  CircularProgress,
 } from "@mui/material";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import { useKeycloak } from "keycloak-react-web";
 import { useNavigate } from "react-router-dom";
+import axios from "axios";
+import CustomSnackbar from "../components/snackbar";
 import logo from "../imgs/logo.png";
 import keycloakLogo from "../imgs/keycloak.png";
 import "./login.css";
@@ -18,32 +21,65 @@ import "./login.css";
 const defaultTheme = createTheme();
 
 export default function LoginPage() {
-  const isFirstMount = useRef(false);
-  const navigate = useNavigate();
   const { keycloak } = useKeycloak();
+  const navigate = useNavigate();
 
-  useEffect(() => {
-    if (keycloak.authenticated && !isFirstMount.current) {
-      isFirstMount.current = true;
-      navigate("/home");
-    }
-  }, [keycloak.authenticated, navigate]);
+  const [loading, setLoading] = useState(false);
+  const [openSnackbar, setOpenSnackbar] = useState(false);
+  const [snackbarMessage, setSnackbarMessage] = useState("");
+  const [snackbarSeverity, setSnackbarSeverity] = useState("success");
 
-  const login = () => {
-    keycloak.login({ redirectUri: `${process.env.REACT_APP_URL}/home` });
+  const handleSSOLogin = () => {
+    keycloak.login({ redirectUri: `${process.env.REACT_APP_URL}` });
   };
+
+  const handleSnackbarClose = () => {
+    setOpenSnackbar(false);
+  };
+
+  const handleLogin = async (event) => {
+    event.preventDefault();
+    setLoading(true);
+    const data = new FormData(event.currentTarget);
+
+    try {
+      const response = await axios.post(
+        "https://keycloak-oauth.azurewebsites.net/auth/realms/confiz-keycloak/protocol/openid-connect/token",
+        {
+          grant_type: "password",
+          client_id: "todo-app-password-client",
+          username: data.get("email"),
+          password: data.get("password"),
+        },
+        {
+          headers: {
+            "Content-Type": "application/x-www-form-urlencoded",
+          },
+        }
+      );
+      localStorage.setItem("keycloak_token", JSON.stringify(response.data));
+
+      navigate("/");
+    } catch (error) {
+      setSnackbarMessage(error?.response?.data?.error_description);
+      setSnackbarSeverity("error");
+      setOpenSnackbar(true);
+    } finally {
+      setLoading(false);
+    }
+  };
+
   return (
     <ThemeProvider theme={defaultTheme}>
+      <CustomSnackbar
+        open={openSnackbar}
+        onClose={handleSnackbarClose}
+        message={snackbarMessage}
+        severity={snackbarSeverity}
+      />
       <Container component="main" maxWidth="xs">
         <CssBaseline />
-        <Box
-          sx={{
-            marginTop: 8,
-            display: "flex",
-            flexDirection: "column",
-            alignItems: "center",
-          }}
-        >
+        <Box className="login-container">
           <div className="round-image-container">
             <img src={logo} alt="Logo" className="round-image" />
           </div>
@@ -53,7 +89,7 @@ export default function LoginPage() {
 
           <Box
             component="form"
-            // onSubmit={handleSubmit}
+            onSubmit={handleLogin}
             noValidate
             sx={{ mt: 1 }}
           >
@@ -85,6 +121,17 @@ export default function LoginPage() {
             >
               Sign In
             </Button>
+            {loading && (
+              <Box
+                sx={{
+                  display: "flex",
+                  justifyContent: "center",
+                  alignItems: "center",
+                }}
+              >
+                <CircularProgress />
+              </Box>
+            )}
           </Box>
           <Divider className="divider">or</Divider>
           <Button
@@ -95,7 +142,7 @@ export default function LoginPage() {
               mt: 3,
               borderRadius: 28,
             }}
-            onClick={login}
+            onClick={handleSSOLogin}
           >
             <img
               src={keycloakLogo}

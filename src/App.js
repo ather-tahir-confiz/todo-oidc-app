@@ -17,8 +17,9 @@ function App() {
     <KeycloakProvider client={keycloak}>
       <Router>
         <Routes>
-          <Route path="/" element={<LoginPage />} />
-          <Route path="/home" element={<ProtectedRoute />} />
+          <Route path="/login" element={<LoginPage />} />
+          <Route path="/home" element={<HomePage />} />
+          <Route path="/" element={<ProtectedRoute />} />
           <Route path="*" element={<Navigate to="/" replace />} />
         </Routes>
       </Router>
@@ -28,6 +29,9 @@ function App() {
 
 function ProtectedRoute() {
   const { keycloak, initialized } = useKeycloak();
+  const token = JSON.parse(localStorage.getItem("keycloak_token"));
+  // console.log("keycloak?.authenticated", keycloak?.authenticated);
+  // console.log("keycloak?.authenticated", token?.access_token);
 
   if (!initialized) {
     return (
@@ -44,11 +48,11 @@ function ProtectedRoute() {
     );
   }
 
-  if (!keycloak.authenticated) {
-    return <Navigate to="/" replace />;
+  if (keycloak.authenticated || token?.access_token) {
+    return <Navigate to="/home" replace />;
   }
 
-  return <HomePage />;
+  return <Navigate to="/login" replace />;
 }
 
 export default App;
