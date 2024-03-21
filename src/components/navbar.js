@@ -10,6 +10,7 @@ import {
 } from "@mui/material";
 import AccountCircle from "@mui/icons-material/AccountCircle";
 import { useKeycloak } from "keycloak-react-web";
+import logo from "../imgs/logo.png";
 
 export default function Navbar({ setIsHome }) {
   const { keycloak } = useKeycloak();
@@ -38,15 +39,17 @@ export default function Navbar({ setIsHome }) {
     <Box sx={{ flexGrow: 1 }}>
       <AppBar position="static">
         <Toolbar>
+          <div onClick={() => setIsHome(true)} className="round-nav-container">
+            <img src={logo} alt="Logo" className="round-nav-image" />
+          </div>
           <Typography
             onClick={() => setIsHome(true)}
             variant="h6"
             component="div"
-            sx={{ flexGrow: 1 }}
+            sx={{ flexGrow: 1, cursor: "pointer" }}
           >
-            OIDC Todo
+            TaskPlanner
           </Typography>
-
           <div>
             <IconButton
               size="large"

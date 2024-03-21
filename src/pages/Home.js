@@ -8,6 +8,7 @@ import CustomSnackbar from "../components/snackbar";
 import Profile from "./Profile";
 import NewTask from "../components/NewTask";
 import TaskList from "../components/TaskList";
+import "./home.css";
 
 function HomePage() {
   const navigate = useNavigate();
@@ -56,16 +57,7 @@ function HomePage() {
       {keycloak.authenticated &&
         (isHome ? (
           <>
-            <h2
-              style={{
-                color: "#1976d2",
-                display: "flex",
-                justifyContent: "center",
-                alignItems: "center",
-              }}
-            >
-              My Todos
-            </h2>
+            <h2 className="headerTitle">My Todos</h2>
             <NewTask
               setSnackbarMessage={setSnackbarMessage}
               setSnackbarSeverity={setSnackbarSeverity}

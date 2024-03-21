@@ -1,14 +1,19 @@
 import React, { useEffect, useRef } from "react";
-import Avatar from "@mui/material/Avatar";
-import Button from "@mui/material/Button";
-import CssBaseline from "@mui/material/CssBaseline";
-import Box from "@mui/material/Box";
-import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
-import Typography from "@mui/material/Typography";
-import Container from "@mui/material/Container";
+import {
+  Container,
+  TextField,
+  Typography,
+  Divider,
+  Box,
+  Button,
+  CssBaseline,
+} from "@mui/material";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import { useKeycloak } from "keycloak-react-web";
 import { useNavigate } from "react-router-dom";
+import logo from "../imgs/logo.png";
+import keycloakLogo from "../imgs/keycloak.png";
+import "./login.css";
 
 const defaultTheme = createTheme();
 
@@ -39,20 +44,64 @@ export default function LoginPage() {
             alignItems: "center",
           }}
         >
-          <Avatar sx={{ m: 1, bgcolor: "secondary.main" }}>
-            <LockOutlinedIcon />
-          </Avatar>
-          <Typography component="h1" variant="h5">
-            OIDC Todo App
+          <div className="round-image-container">
+            <img src={logo} alt="Logo" className="round-image" />
+          </div>
+          <Typography className="title" component="h1" variant="h5">
+            TaskPlanner
           </Typography>
 
+          <Box
+            component="form"
+            // onSubmit={handleSubmit}
+            noValidate
+            sx={{ mt: 1 }}
+          >
+            <TextField
+              margin="normal"
+              required
+              fullWidth
+              id="email"
+              label="Email Address"
+              name="email"
+              autoComplete="email"
+              autoFocus
+            />
+            <TextField
+              margin="normal"
+              required
+              fullWidth
+              name="password"
+              label="Password"
+              type="password"
+              id="password"
+              autoComplete="current-password"
+            />
+            <Button
+              type="submit"
+              fullWidth
+              variant="contained"
+              sx={{ mt: 3, mb: 3, borderRadius: 28 }}
+            >
+              Sign In
+            </Button>
+          </Box>
+          <Divider className="divider">or</Divider>
           <Button
             type="submit"
             fullWidth
-            variant="contained"
-            sx={{ mt: 3, mb: 2 }}
+            variant="outlined"
+            sx={{
+              mt: 3,
+              borderRadius: 28,
+            }}
             onClick={login}
           >
+            <img
+              src={keycloakLogo}
+              alt="keycloak"
+              className="round-keycloak-image"
+            />
             Sign in with Keycloak
           </Button>
         </Box>
